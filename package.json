@@ -1,0 +1,50 @@
+{
+    "name": "component-application",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vue-tsc -b && vite build",
+        "lint": "eslint . --ext .js,.ts,.vue",
+        "lint:fix": "eslint . --ext .js,.ts,.vue --fix",
+        "lint:style": "stylelint src/**/*.{css,vue}",
+        "lint:style:fix": "stylelint src/**/*.{css,vue} --fix",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "element-plus": "^2.12.0",
+        "pinia": "^2.1.4",
+        "vue": "^3.5.12",
+        "vue-router": "^4.6.3"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.1.17",
+        "@types/node": "^24.10.1",
+        "@typescript-eslint/eslint-plugin": "^8.48.0",
+        "@typescript-eslint/parser": "^8.48.0",
+        "@vitejs/plugin-vue": "^5.1.4",
+        "SElement": "git+https://gitlab.com/sc4112sc/element.git",
+        "autoprefixer": "^10.4.22",
+        "eslint": "^8.57.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-n": "^17.23.1",
+        "eslint-plugin-promise": "^7.2.1",
+        "eslint-plugin-vue": "^10.6.2",
+        "postcss": "^8.5.6",
+        "postcss-html": "^1.8.0",
+        "stylelint": "^15.10.0",
+        "stylelint-config-recommended": "^13.0.0",
+        "stylelint-config-recommended-vue": "^1.6.1",
+        "stylelint-config-standard": "^34.0.0",
+        "tailwindcss": "^4.1.17",
+        "typescript": "~5.6.2",
+        "vite": "^5.4.10",
+        "vue-eslint-parser": "^10.2.0",
+        "vue-tsc": "^2.1.8"
+    },
+    "resolutions": {
+        "stylelint-config-recommended": "13.0.0"
+    }
+}
