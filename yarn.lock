@@ -911,9 +911,9 @@
   dependencies:
     vue-demi ">=0.14.8"
 
-"SElement@git+https://gitlab.com/sc4112sc/element.git":
+"SElement@git+https://sc4112sc:glpat-T6-NJSaap7Fw3b9A0ICtpW86MQp1OjNscjBhCw.01.120da98mh@gitlab.com/sc4112sc/element.git":
   version "0.0.7"
-  resolved "git+https://gitlab.com/sc4112sc/element.git#557e4d1b65722275458b78222ab5aedbeda9953e"
+  resolved "git+https://sc4112sc:glpat-T6-NJSaap7Fw3b9A0ICtpW86MQp1OjNscjBhCw.01.120da98mh@gitlab.com/sc4112sc/element.git#557e4d1b65722275458b78222ab5aedbeda9953e"
   dependencies:
     "@senojs/rollup-plugin-style-inject" "^0.2.3"
     cva "npm:class-variance-authority"

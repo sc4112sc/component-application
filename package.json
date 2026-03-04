@@ -24,7 +24,7 @@
         "@typescript-eslint/eslint-plugin": "^8.48.0",
         "@typescript-eslint/parser": "^8.48.0",
         "@vitejs/plugin-vue": "^5.1.4",
-        "SElement": "git+https://gitlab.com/sc4112sc/element.git",
+        "SElement": "git+https://sc4112sc:glpat-T6-NJSaap7Fw3b9A0ICtpW86MQp1OjNscjBhCw.01.120da98mh@gitlab.com/sc4112sc/element.git",
         "autoprefixer": "^10.4.22",
         "eslint": "^8.57.0",
         "eslint-config-standard": "^17.1.0",
