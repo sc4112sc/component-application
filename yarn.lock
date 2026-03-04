@@ -894,7 +894,7 @@
 
 "SElement@git+https://gitlab.com/sc4112sc/element.git":
   version "0.0.7"
-  resolved "git+https://gitlab.com/sc4112sc/element.git#e21580a15326526d41e125de23702d455c4946e0"
+  resolved "git+https://gitlab.com/sc4112sc/element.git#557e4d1b65722275458b78222ab5aedbeda9953e"
   dependencies:
     "@senojs/rollup-plugin-style-inject" "^0.2.3"
     cva "npm:class-variance-authority"
@@ -3800,9 +3800,9 @@ typescript@~5.6.2:
   integrity sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==
 
 ufo@^1.6.1:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.6.2.tgz#aaf4d46b98425b2fb5031abe8d65ca069e93e755"
-  integrity sha512-heMioaxBcG9+Znsda5Q8sQbWnLJSl98AFDXTO80wELWEzX3hordXsTdxrIfMQoO9IY1MEnoGoPjpoKpMj+Yx0Q==
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.6.3.tgz#799666e4e88c122a9659805e30b9dc071c3aed4f"
+  integrity sha512-yDJTmhydvl5lJzBmy/hyOAA0d+aqCBuwl818haVdYCRrWV84o7YyeVm4QlVHStqNrrJSTb6jKuFAVqAFsr+K3Q==
 
 unbox-primitive@^1.1.0:
   version "1.1.0"

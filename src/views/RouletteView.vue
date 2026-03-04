@@ -412,10 +412,6 @@ const goToElementSystem = () => {
                     {{ selectedComponent.name }}
                 </div>
             </div>
-            
-            <div class="component-info">
-                 <p>PATH: <span class="path-text">{{ selectedComponent.route }}</span></p>
-            </div>
 
             <div class="component-demo-wrapper">
                 <div v-if="selectedComponent.name === 'Modal'" class="flex flex-col items-center gap-4">
