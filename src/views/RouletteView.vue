@@ -2,6 +2,7 @@
 import { ref, shallowRef, reactive, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Component } from 'vue';
+import { useDecoderStore } from '../stores/decoderStore';
 import {
     tButton,
     tInput,
@@ -221,6 +222,10 @@ const decodingText = ref('READY');
 const glitchChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
 let decodeInterval: any = null;
 
+const decoderStore = useDecoderStore();
+const showInventory = ref(false);
+const activeInventoryTab = ref('history');
+
 // Helper to get reactive props
 const getComponentProps = (item: ComponentItem) => {
     switch (item.name) {
@@ -310,6 +315,17 @@ const getComponentProps = (item: ComponentItem) => {
     }
 };
 
+const selectComponentFromName = (name: string) => {
+    const comp = components.find(c => c.name === name);
+    if (comp) {
+        selectedComponent.value = comp;
+        decodingText.value = comp.name.toUpperCase();
+        if (window.innerWidth <= 800) {
+            showInventory.value = false;
+        }
+    }
+};
+
 const startDecode = () => {
     if (isDecoding.value) return;
 
@@ -317,7 +333,7 @@ const startDecode = () => {
     selectedComponent.value = null; // Hide result during decode
     
     let duration = 0;
-    const maxDuration = 150; // Total cycles before stop
+    const maxDuration = 30; // Reduced total cycles for faster decode
     
     // Random component selection
     const targetIndex = Math.floor(Math.random() * components.length);
@@ -347,6 +363,7 @@ const startDecode = () => {
             isDecoding.value = false;
             decodingText.value = targetComponent.name.toUpperCase();
             selectedComponent.value = targetComponent;
+            decoderStore.addHistory(targetComponent.name, targetComponent.color);
         }
 
     }, 30); // Fast update
@@ -364,15 +381,45 @@ const goToElementSystem = () => {
 </script>
 
 <template>
-    <div class="cyber-container">
+    <div class="cyber-container" :class="{ 'sidebar-open': showInventory }">
         <!-- Background Effects -->
         <div class="cyber-grid"></div>
         <div class="scanlines"></div>
 
-        <button class="cyber-btn nav-btn" @click="goToElementSystem">
-            <span class="btn-content">ELEMENT SYSTEM</span>
+        <button class="cyber-btn nav-btn-left" @click="showInventory = !showInventory">
+            <span class="btn-content desktop-text">INVENTORY [{{ decoderStore.history.length }}]</span>
+            <span class="btn-content mobile-text">☰</span>
             <span class="btn-glitch"></span>
         </button>
+
+        <button class="cyber-btn nav-btn" @click="goToElementSystem">
+            <span class="btn-content desktop-text">ELEMENT SYSTEM</span>
+            <span class="btn-content mobile-text">⊞</span>
+            <span class="btn-glitch"></span>
+        </button>
+
+        <!-- Inventory Sidebar -->
+        <div class="inventory-sidebar" :class="{ 'is-open': showInventory }">
+            <div class="sidebar-header">
+                <h3>INVENTORY</h3>
+                <button class="close-btn" @click="showInventory = false">×</button>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="log-list">
+                    <div v-if="decoderStore.history.length === 0" class="empty-state">NO LOGS FOUND</div>
+                    <div 
+                        v-for="item in decoderStore.history" 
+                        :key="item.id" 
+                        class="log-item"
+                        @click="selectComponentFromName(item.name)"
+                    >
+                        <span class="log-time">{{ new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}) }}</span>
+                        <span class="log-name" :style="{ color: item.color }">{{ item.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="header-section">
             <h1 class="cyber-title" data-text="SYSTEM DETECTED">SYSTEM DETECTED</h1>
@@ -406,7 +453,7 @@ const goToElementSystem = () => {
         </div>
 
         <div v-if="selectedComponent" class="result-section cyber-result">
-            <div class="result-header">
+            <div class="result-header" style="text-align: center;">
                 <div class="result-label">TARGET ACQUIRED</div>
                 <div class="result-name" :style="{ color: selectedComponent.color, borderColor: selectedComponent.color }">
                     {{ selectedComponent.name }}
@@ -674,14 +721,17 @@ const goToElementSystem = () => {
 
 .nav-btn {
     position: fixed;
-    top: auto;
-    bottom: 2rem;
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 2rem;
+    bottom: auto;
+    right: 2rem;
+    left: auto;
+    transform: none;
     padding: 0.5rem 1rem;
     font-size: 1rem;
     z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Result Section */
@@ -772,7 +822,118 @@ const goToElementSystem = () => {
     100% { opacity: 0.9; }
 }
 
-/* Mobile Adjustments */
+
+/* Sidebar Styles */
+.nav-btn-left {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inventory-sidebar {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 350px;
+    height: 100vh;
+    background: rgba(10, 10, 15, 0.95);
+    border-right: 1px solid #A29BFE;
+    box-shadow: 10px 0 30px rgba(162, 155, 254, 0.1);
+    z-index: 200;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1rem;
+    backdrop-filter: blur(10px);
+}
+
+.inventory-sidebar.is-open {
+    left: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #fff;
+    text-shadow: 0 0 5px currentColor;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #ff0055;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: #A29BFE;
+}
+
+.empty-state {
+    color: #555;
+    text-align: center;
+    margin-top: 2rem;
+    font-style: italic;
+}
+
+.log-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    border: 1px solid #333;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.log-item:hover {
+    border-color: #A29BFE;
+    background: rgba(162, 155, 254, 0.1);
+}
+
+.log-time {
+    color: #555;
+    font-size: 0.8rem;
+    margin-right: 1rem;
+}
+
+.log-name {
+    font-weight: bold;
+}
+
+.mobile-text {
+    display: none;
+}
+
+/* Adjust mobile styles */
 @media (max-width: 600px) {
     .cyber-title {
         font-size: 1.8rem;
@@ -784,18 +945,49 @@ const goToElementSystem = () => {
         font-size: 1.5rem;
     }
     .nav-btn {
-        top: auto;
-        bottom: 1.5rem;
-        right: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
-        width: max-content;
+        top: 1rem;
+        bottom: auto;
+        right: 1rem;
+        left: auto;
+        transform: none;
+        padding: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .cyber-container {
         padding: 1rem;
+    }
+    
+    .inventory-sidebar {
+        width: 100%;
+        left: -100%;
+    }
+    
+    .nav-btn-left {
+        top: 1rem;
+        bottom: auto;
+        left: 1rem;
+        padding: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .desktop-text {
+        display: none;
+    }
+    
+    .mobile-text {
+        display: inline-block !important;
+        font-size: 1.5rem;
+        line-height: 1;
+        margin-top: 2px;
     }
 }
 
