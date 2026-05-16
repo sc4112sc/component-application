@@ -17,7 +17,7 @@
 *   **深色模式完美融合**：直接呼叫元件庫的深色模式 API (`setDarkMode`)，讓所有抽出的 UI 元件都能無縫融入黑底的科技風格中。
 
 ### 3. 🗺 動態路由擴充整合 (Dynamic Route Integration)
-*   **外部路由注入**：在 `router/index.ts` 中，除了定義專案自身的基礎路由 (`/`, `/roulette`, `/about`) 外，還將私有元件庫 `SElement` 中內建的展示路由無縫整合進當前專案中。
+*   **外部路由注入**：在 `router/index.ts` 中，除了定義專案自身的基礎路由 (`/`, `/roulette`) 外，還將私有元件庫 `SElement` 中內建的展示路由無縫整合進當前專案中。
 
 ---
 
@@ -53,17 +53,17 @@ src/
 ├── assets/               # 靜態資源目錄
 │   └── iconFont/         # 自定義字體圖標 (Fontello) 的 CSS 與字型檔。
 │
-├── components/           # 共用元件目錄 (Shared Components)
-│   └── HelloWorld.vue    # 基礎測試用組件。
+├── components/           # 核心功能元件目錄 (Core Components)
+│   ├── DecoderBox.vue    # 【解碼控制器】三段式箭頭按鈕與狀態顯示核心。
+│   ├── InventorySidebar.vue # 【庫存側邊欄】含解碼歷史記錄與自動關閉背景遮罩。
+│   └── ComponentShowcase.vue # 【元件展示台】動態渲染並測試解碼出的 SElement 元件。
 │
 ├── views/                # 頁面級視圖目錄 (Pages/Views)
-│   ├── RouletteView.vue  # 【核心功能頁面】Cyberpunk 元件解碼器，包含亂碼動畫邏輯與 SElement 動態渲染。
-│   ├── HomeView.vue      # 首頁視圖預設進入點 (目前導向 RouletteView)。
-│   └── AboutView.vue     # 關於頁面視圖。
+│   └── RouletteView.vue  # 【主場景頁面】Cyberpunk 元件解碼器主佈局與控制邏輯。
 │
 ├── router/               # 路由設定目錄
-│   └── index.ts          # 初始化 Vue Router，定義內部路徑映射，並使用展開運算子注入 SElement 的路由配置。
+│   └── index.ts          # 初始化 Vue Router，注入專案基礎路徑與 SElement 路由。
 │
 └── stores/               # 狀態管理目錄 (Pinia Stores)
-    └── (Pinia modules)   # 用於存放全局共用的狀態變數與業務邏輯。
+    └── decoderStore.ts   # 管理元件解碼歷史、庫存數據與全局狀態。
 ```
