@@ -107,8 +107,8 @@ const goToElementSystem = () => {
         />
 
         <div class="header-section">
-            <h1 class="cyber-title" data-text="SYSTEM DETECTED">SYSTEM DETECTED</h1>
-            <p class="cyber-subtitle">COMPONENT DECODER v1.0</p>
+            <h1 class="cyber-title" data-text="COMPONENT LIBRARY DECODER">COMPONENT LIBRARY DECODER</h1>
+            <p class="cyber-subtitle">v1.0</p>
         </div>
 
         <DecoderBox 
@@ -174,6 +174,7 @@ const goToElementSystem = () => {
 .header-section {
     z-index: 2;
     text-align: center;
+    margin-top: 4rem;
     margin-bottom: 2rem;
 }
 
