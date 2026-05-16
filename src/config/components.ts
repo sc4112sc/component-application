@@ -21,7 +21,6 @@ import {
     tModal,
     tTransfer,
     tTree,
-    tOption,
 } from 'SElement';
 
 export interface ComponentItem {

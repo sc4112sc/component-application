@@ -10,118 +10,89 @@ defineEmits<{
 </script>
 
 <template>
-    <div class="decoder-wrapper">
+    <div class="flex flex-col items-center gap-8 z-20">
         <!-- Status Indicators -->
-        <div class="status-bar">
-            <span class="status-item">NET: <span class="active">ONLINE</span></span>
-            <span class="status-item">SEC: <span class="active">SECURE</span></span>
-            <span class="status-item">CPU: <span class="random-val">98%</span></span>
+        <div class="flex gap-8 text-[0.9rem] text-[#555]">
+            <span>NET: <span class="text-[#55EFC4] [text-shadow:0_0_5px_#55EFC4]">ONLINE</span></span>
+            <span>SEC: <span class="text-[#55EFC4] [text-shadow:0_0_5px_#55EFC4]">SECURE</span></span>
+            <span>CPU: <span class="text-[#FDCB6E] animate-[textFlicker_2s_infinite]">98%</span></span>
         </div>
 
-        <!-- Main Decoder Box -->
-        <div class="decoder-box" :class="{ 'decoding': isDecoding }">
-            <div class="corner top-left"></div>
-            <div class="corner top-right"></div>
-            <div class="corner bottom-left"></div>
-            <div class="corner bottom-right"></div>
+        <!-- Main Decoder Box (Redesigned) -->
+        <div 
+            class="relative w-[320px] h-[120px] rounded-xl flex items-center justify-center transition-all duration-500 overflow-hidden backdrop-blur-md border-2"
+            :class="isDecoding ? 'border-rose-500 shadow-[0_0_40px_rgba(244,63,94,0.6)] bg-gradient-to-b from-rose-950/40 to-black' : 'border-[#A29BFE]/50 shadow-[0_0_30px_rgba(162,155,254,0.2)] bg-gradient-to-b from-purple-900/20 to-black'"
+        >
+            <!-- Scanning line effect -->
+            <div class="absolute inset-0 w-full h-[2px] bg-white/20 animate-[gridMove_2s_linear_infinite] opacity-50" v-if="isDecoding"></div>
             
-            <div class="decoder-screen">
-                <div class="glitch-text" :data-text="decodingText">{{ decodingText }}</div>
+            <div 
+                class="text-[2.5rem] max-sm:text-[2rem] font-bold tracking-widest min-h-[3.5rem] flex items-center justify-center transition-colors duration-300"
+                :class="isDecoding ? 'text-rose-500 [text-shadow:0_0_15px_#f43f5e]' : 'text-[#A29BFE] [text-shadow:0_0_15px_rgba(162,155,254,0.5)]'"
+            >
+                <div class="relative animate-[textFlicker_0.1s_infinite] uppercase" :data-text="decodingText">{{ decodingText }}</div>
             </div>
         </div>
 
-        <button class="cyber-btn" @click="$emit('start-decode')" :disabled="isDecoding">
-            <span class="btn-content">{{ isDecoding ? 'DECODING...' : 'INITIATE DECODE' }}</span>
-            <span class="btn-glitch"></span>
+        <button 
+            class="relative flex flex-col items-center gap-6 group cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent border-none" 
+            @click="$emit('start-decode')" 
+            :disabled="isDecoding"
+        >
+            <!-- Triple Cascading Chevrons -->
+            <div class="flex flex-col items-center -gap-2">
+                <!-- Chevron 1 (Top) -->
+                <div 
+                    class="w-16 h-8 transition-all duration-300"
+                    :class="[
+                        isDecoding ? 'text-rose-500' : 'text-[#A29BFE] opacity-40 group-hover:opacity-100 group-hover:translate-y-1',
+                        !isDecoding && 'animate-[textFlicker_2s_infinite]'
+                    ]"
+                >
+                    <svg viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full stroke-current stroke-2">
+                        <path d="M2 2L12 10L22 2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <!-- Chevron 2 (Middle) -->
+                <div 
+                    class="w-16 h-8 transition-all duration-300 -mt-4"
+                    :class="[
+                        isDecoding ? 'text-rose-500 delay-75' : 'text-[#A29BFE] opacity-60 group-hover:opacity-100 group-hover:translate-y-2',
+                        !isDecoding && 'animate-[textFlicker_2s_infinite_100ms]'
+                    ]"
+                >
+                    <svg viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full stroke-current stroke-2">
+                        <path d="M2 2L12 10L22 2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <!-- Chevron 3 (Bottom) -->
+                <div 
+                    class="w-16 h-8 transition-all duration-300 -mt-4"
+                    :class="[
+                        isDecoding ? 'text-rose-500 delay-150' : 'text-[#A29BFE] group-hover:text-white group-hover:translate-y-3',
+                        !isDecoding && 'animate-[textFlicker_2s_infinite_200ms]'
+                    ]"
+                >
+                    <svg viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full stroke-current stroke-2">
+                        <path d="M2 2L12 10L22 2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Action Text -->
+            <div class="flex flex-col items-center">
+                <span 
+                    class="text-[0.7rem] font-bold tracking-[0.6em] transition-all duration-300"
+                    :class="isDecoding ? 'text-rose-400 animate-pulse' : 'text-[#A29BFE] opacity-60 group-hover:opacity-100'"
+                >
+                    {{ isDecoding ? 'DECODING...' : 'TAP TO DECODE' }}
+                </span>
+                <div class="mt-2 w-8 h-[1px] bg-[#A29BFE]/30 group-hover:w-20 group-hover:bg-[#A29BFE] transition-all duration-500"></div>
+            </div>
+
         </button>
     </div>
 </template>
 
 <style scoped>
-.decoder-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    z-index: 2;
-}
-
-.status-bar {
-    display: flex;
-    gap: 2rem;
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.status-item .active {
-    color: #55EFC4;
-    text-shadow: 0 0 5px #55EFC4;
-}
-
-.status-item .random-val {
-    color: #FDCB6E;
-    animation: textFlicker 2s infinite;
-}
-
-.decoder-box {
-    position: relative;
-    width: 300px;
-    height: 100px;
-    border: 2px solid #333;
-    background: rgba(10, 10, 15, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 20px rgba(162, 155, 254, 0.1);
-}
-
-.decoder-box.decoding {
-    border-color: #ff0055;
-    box-shadow: 0 0 20px rgba(255, 0, 85, 0.3);
-}
-
-.corner {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border: 2px solid #A29BFE;
-    transition: all 0.3s;
-}
-
-.decoding .corner {
-    border-color: #ff0055;
-}
-
-.top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-.top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
-.bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
-.bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-
-.decoder-screen {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #fff;
-    min-height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.glitch-text {
-    position: relative;
-    animation: textFlicker 0.1s infinite;
-}
-
-@keyframes textFlicker {
-    0% { opacity: 0.8; }
-    50% { opacity: 1; text-shadow: 2px 0 #ff0055, -2px 0 #A29BFE; }
-    100% { opacity: 0.9; }
-}
-
-@media (max-width: 600px) {
-    .decoder-screen {
-        font-size: 1.5rem;
-    }
-}
 </style>

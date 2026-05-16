@@ -14,24 +14,34 @@ const decoderStore = useDecoderStore();
 </script>
 
 <template>
+    <!-- Backdrop (Close on click outside) -->
+    <div 
+        v-if="showInventory" 
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[190] transition-opacity duration-300"
+        @click="$emit('update:showInventory', false)"
+    ></div>
+
     <!-- Inventory Sidebar -->
-    <div class="inventory-sidebar" :class="{ 'is-open': showInventory }">
-        <div class="sidebar-header">
-            <h3>INVENTORY</h3>
-            <button class="close-btn" @click="$emit('update:showInventory', false)">×</button>
+    <div 
+        class="fixed top-0 -left-[350px] w-[350px] max-sm:w-full max-sm:-left-full h-screen bg-[#0a0a0f]/95 border-r border-[#A29BFE] shadow-[10px_0_30px_rgba(162,155,254,0.1)] z-[200] transition-[left] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col p-8 px-4 backdrop-blur-md" 
+        :class="showInventory ? '!left-0 max-sm:!left-0' : ''"
+    >
+        <div class="flex justify-between items-center border-b border-[#333] pb-4 mb-4">
+            <h3 class="m-0 text-2xl text-white [text-shadow:0_0_5px_currentColor]">INVENTORY</h3>
+            <button class="bg-transparent border-none text-[#ff0055] text-3xl cursor-pointer leading-none p-0" @click="$emit('update:showInventory', false)">×</button>
         </div>
         
-        <div class="sidebar-content">
+        <div class="flex-1 overflow-y-auto sidebar-scroll">
             <div class="log-list">
-                <div v-if="decoderStore.history.length === 0" class="empty-state">NO LOGS FOUND</div>
+                <div v-if="decoderStore.history.length === 0" class="text-[#555] text-center mt-8 italic">NO LOGS FOUND</div>
                 <div 
                     v-for="item in decoderStore.history" 
                     :key="item.id" 
-                    class="log-item"
+                    class="flex items-center p-3 border border-[#333] mb-2 cursor-pointer transition-all duration-200 bg-black/50 hover:border-[#A29BFE] hover:bg-[rgba(162,155,254,0.1)]"
                     @click="$emit('select-component', item.name)"
                 >
-                    <span class="log-time">{{ new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}) }}</span>
-                    <span class="log-name" :style="{ color: item.color }">{{ item.name }}</span>
+                    <span class="text-[#555] text-xs mr-4">{{ new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}) }}</span>
+                    <span class="font-bold" :style="{ color: item.color }">{{ item.name }}</span>
                 </div>
             </div>
         </div>
@@ -39,103 +49,10 @@ const decoderStore = useDecoderStore();
 </template>
 
 <style scoped>
-.inventory-sidebar {
-    position: fixed;
-    top: 0;
-    left: -350px;
-    width: 350px;
-    height: 100vh;
-    background: rgba(10, 10, 15, 0.95);
-    border-right: 1px solid #A29BFE;
-    box-shadow: 10px 0 30px rgba(162, 155, 254, 0.1);
-    z-index: 200;
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 1rem;
-    backdrop-filter: blur(10px);
-}
-
-.inventory-sidebar.is-open {
-    left: 0;
-}
-
-.sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #333;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-}
-
-.sidebar-header h3 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #fff;
-    text-shadow: 0 0 5px currentColor;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    color: #ff0055;
-    font-size: 2rem;
-    cursor: pointer;
-    line-height: 1;
-    padding: 0;
-}
-
-.sidebar-content {
-    flex: 1;
-    overflow-y: auto;
-}
-
-.sidebar-content::-webkit-scrollbar {
+.sidebar-scroll::-webkit-scrollbar {
     width: 4px;
 }
-
-.sidebar-content::-webkit-scrollbar-thumb {
+.sidebar-scroll::-webkit-scrollbar-thumb {
     background: #A29BFE;
-}
-
-.empty-state {
-    color: #555;
-    text-align: center;
-    margin-top: 2rem;
-    font-style: italic;
-}
-
-.log-item {
-    display: flex;
-    align-items: center;
-    padding: 0.8rem;
-    border: 1px solid #333;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.log-item:hover {
-    border-color: #A29BFE;
-    background: rgba(162, 155, 254, 0.1);
-}
-
-.log-time {
-    color: #555;
-    font-size: 0.8rem;
-    margin-right: 1rem;
-}
-
-.log-name {
-    font-weight: bold;
-}
-
-@media (max-width: 600px) {
-    .inventory-sidebar {
-        width: 100%;
-        left: -100%;
-    }
 }
 </style>
