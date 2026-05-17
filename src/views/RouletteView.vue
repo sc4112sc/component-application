@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, shallowRef, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useWindowSize } from '@vueuse/core';
 import { useDecoderStore } from '../stores/decoderStore';
 import { components, type ComponentItem } from '../config/components';
 import InventorySidebar from '../components/InventorySidebar.vue';
@@ -9,6 +10,7 @@ import ComponentShowcase from '../components/ComponentShowcase.vue';
 
 const router = useRouter();
 const decoderStore = useDecoderStore();
+const { width, height } = useWindowSize();
 
 const showInventory = ref(false);
 const isDecoding = ref(false);
@@ -120,6 +122,11 @@ const goToElementSystem = () => {
         <ComponentShowcase 
             :selected-component="selectedComponent" 
         />
+
+        <!-- System Resolution -->
+        <div class="fixed bottom-4 left-4 text-[0.6rem] text-[#A29BFE]/40 tracking-widest pointer-events-none z-0 max-sm:hidden font-mono">
+            RES: {{ width }}x{{ height }}
+        </div>
     </div>
 </template>
 

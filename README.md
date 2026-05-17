@@ -32,8 +32,11 @@
 *   **[Vue Router (v4.6.3)](https://router.vuejs.org/)**：官方路由管理器。負責處理 SPA (單頁面應用程式) 的頁面跳轉、歷史紀錄管理，以及外部元件庫路由模組的掛載。
 *   **[Pinia (v2.1.4)](https://pinia.vuejs.org/)**：新一代的 Vue 狀態管理庫。相比 Vuex，它捨棄了複雜的 Mutations，提供更直觀的 Store 定義方式與完美的 TypeScript 推斷支援。
 
-### 私有元件庫整合
-*   **SElement**：透過 Git URL (`git+https://.../sc4112sc/element.git`) 引入的私有企業級 UI 元件庫。本專案作為該元件庫的「展示與測試平台」，深度調用了其內部封裝的 `tButton`, `tSelect`, `tTabs` 等元件。
+### 工具函式庫
+*   **[VueUse](https://vueuse.org/)**：強大的 Vue 組合式 API 擴充庫。在專案中提供豐富的即時響應式工具函式（如即時效能監測、狀態擷取等），簡化複雜邏輯並增強應用程式的互動性與即時回饋。
+
+### 自研私有元件庫整合
+*   **SElement**：由開發者**獨立自研、架構對標 Element Plus** 所打造的專屬 UI 元件庫。透過 Git URL (`git+https://.../sc4112sc/element.git`) 引入。本專案作為該元件庫的「展示與測試平台」，深度調用了其內部封裝的 `tButton`, `tSelect`, `tTabs` 等元件。
 
 ### 樣式與代碼品質管控
 *   **[Tailwind CSS (v4.1.17)](https://tailwindcss.com/)**：實用優先 (Utility-first) 的 CSS 框架。允許開發者直接在 HTML/Vue 模板中透過 class 名稱快速構建自定義佈局，無需頻繁切換至 CSS 檔案。

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useNetwork, useFps, useMouse, useNow, useDateFormat } from '@vueuse/core';
+
 defineProps<{
     isDecoding: boolean;
     decodingText: string;
@@ -7,15 +9,23 @@ defineProps<{
 defineEmits<{
     (e: 'start-decode'): void;
 }>();
+
+// VueUse Data
+const { isOnline, downlink } = useNetwork();
+const fps = useFps();
+const { x, y } = useMouse();
+const now = useNow();
+const formattedTime = useDateFormat(now, 'HH:mm:ss');
 </script>
 
 <template>
     <div class="flex flex-col items-center gap-8 z-20">
         <!-- Status Indicators -->
-        <div class="flex gap-8 text-[0.9rem] text-[#555]">
-            <span>NET: <span class="text-[#55EFC4] [text-shadow:0_0_5px_#55EFC4]">ONLINE</span></span>
-            <span>SEC: <span class="text-[#55EFC4] [text-shadow:0_0_5px_#55EFC4]">SECURE</span></span>
-            <span>CPU: <span class="text-[#FDCB6E] animate-[textFlicker_2s_infinite]">98%</span></span>
+        <div class="flex flex-wrap justify-center gap-4 sm:gap-8 text-[0.7rem] sm:text-[0.9rem] text-[#555] w-full max-w-[400px]">
+            <span>NET: <span :class="isOnline ? 'text-[#55EFC4] [text-shadow:0_0_5px_#55EFC4]' : 'text-rose-500 [text-shadow:0_0_5px_#f43f5e] animate-pulse'">{{ isOnline ? 'ON / ' + (downlink || '--') + 'M' : 'OFFLINE' }}</span></span>
+            <span>FPS: <span class="text-[#FDCB6E] [text-shadow:0_0_5px_#FDCB6E]">{{ fps }}</span></span>
+            <span class="max-sm:hidden">POS: <span class="text-[#74b9ff] [text-shadow:0_0_5px_#74b9ff]">{{ Math.round(x) }},{{ Math.round(y) }}</span></span>
+            <span>SYS: <span class="text-[#A29BFE] [text-shadow:0_0_5px_#A29BFE] animate-[textFlicker_3s_infinite]">{{ formattedTime }}</span></span>
         </div>
 
         <!-- Main Decoder Box (Redesigned) -->
